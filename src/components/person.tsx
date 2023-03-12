@@ -3,6 +3,8 @@ import styles from "../styles/Person.module.css";
 
 const seconds = 60;
 
+const statusNamesOrder = ["To do", "In Review", "In Progress"];
+
 export default function Person({ data, onClick }: any) {
   const [counter, setCounter] = useState(seconds);
 
@@ -19,13 +21,20 @@ export default function Person({ data, onClick }: any) {
     setCounter(seconds);
   }, [data?.issues[0]?.fields?.assignee?.displayName]);
 
-  const readyIssues = data.issues.filter((issue: any) => {
-    const isDone =
-      issue.fields.status.name === "Won't Fix" ||
-      issue.fields.status.name === "Done";
+  const readyIssues = data.issues
+    .filter((issue: any) => {
+      const isDone =
+        issue.fields.status.name === "Won't Fix" ||
+        issue.fields.status.name === "Done";
 
-    return issue.fields.project.key === "FS" && !isDone;
-  });
+      return !isDone;
+    })
+    .sort((prev: any, next: any) => {
+      return statusNamesOrder.indexOf(prev.fields.status.name) >
+        statusNamesOrder.indexOf(next.fields.status.name)
+        ? -1
+        : 1;
+    });
 
   return (
     <div>
@@ -44,9 +53,10 @@ export default function Person({ data, onClick }: any) {
         readyIssues.map((issue: any, index: number) => {
           return (
             <div key={index} className={styles.issue}>
-              <p>
+              <p className={styles.issueTitle}>
                 {" "}
-                <strong>{issue.key} </strong>{" "}
+                <img src={issue.fields.issuetype.iconUrl} alt="Icon" />
+                {issue.key}
               </p>
               <p>
                 {issue.fields.status.name}: {issue.fields.summary}
