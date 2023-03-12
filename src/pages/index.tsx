@@ -5,34 +5,25 @@ import styles from "@/styles/Home.module.css";
 
 import Person from "@/components/person";
 
+import { getProject, getUserPromises } from "@/services/jira";
+import { reduceByIndexOrder } from "@/helpers";
+import { JIRA_USERS, NAMES } from "@/constants";
+
 let counter = 0;
 
-const names = [
-  "ada",
-  "slawek",
-  "rafal",
-  "michal",
-  "marek",
-  "szymon",
-  "michalm",
-  "lukasz",
-  "chris",
-  "adrian",
-].sort(() => Math.random() - 0.5);
-
 export default function Home({ project, users }: any) {
-  const [currentUser, setCurrentUser] = useState(names[0]);
+  const [currentUser, setCurrentUser] = useState(NAMES[0]);
   const [end, setEnd] = useState(false);
   const [start, setStart] = useState(false);
 
   const handleClick = () => {
     counter++;
 
-    if (counter > names.length - 1) {
+    if (counter > NAMES.length - 1) {
       return setEnd(true);
     }
 
-    setCurrentUser(names[counter]);
+    setCurrentUser(NAMES[counter]);
   };
 
   if (!start) {
@@ -83,155 +74,13 @@ export default function Home({ project, users }: any) {
   );
 }
 
-const base64encodedData = Buffer.from(
-  process.env.JIRA_EMAIL + ":" + process.env.JIRA_PERSONAL_ACCESS_TOKEN
-).toString("base64");
-
-const getLink = (jiraId: string) => {
-  return `${process.env.JIRA_URL}/rest/api/2/search?jql=assignee%${jiraId}`;
-};
-
-const getProject = () => {
-  return fetch(`${process.env.JIRA_URL}/rest/api/latest/project/FS`, {
-    headers: {
-      Authorization: "Basic " + base64encodedData,
-      "Content-type": "application/json",
-    },
-  }).then((res) => res.json());
-};
-
-const getChris = () => {
-  return fetch(getLink("3D6397943b61aba8a6a32c7cfb"), {
-    headers: {
-      Authorization: "Basic " + base64encodedData,
-      "Content-type": "application/json",
-    },
-  }).then((res) => res.json());
-};
-
-const getLukasz = () => {
-  return fetch(getLink("3D61656c307a6be400716050bd"), {
-    headers: {
-      Authorization: "Basic " + base64encodedData,
-      "Content-type": "application/json",
-    },
-  }).then((res) => res.json());
-};
-
-const getMichalM = () => {
-  return fetch(getLink("3D63b2ef228a07cbd184ab20e0"), {
-    headers: {
-      Authorization: "Basic " + base64encodedData,
-      "Content-type": "application/json",
-    },
-  }).then((res) => res.json());
-};
-
-const getSzymon = () => {
-  return fetch(getLink("3D633aa362234d44d406d3c27f"), {
-    headers: {
-      Authorization: "Basic " + base64encodedData,
-      "Content-type": "application/json",
-    },
-  }).then((res) => res.json());
-};
-
-const getMarek = () => {
-  return fetch(getLink("3D633aa00461dbef2805c10e68"), {
-    headers: {
-      Authorization: "Basic " + base64encodedData,
-      "Content-type": "application/json",
-    },
-  }).then((res) => res.json());
-};
-
-const getMichal = () => {
-  return fetch(getLink("3D62f0ded8ec6b328032f2c3a7"), {
-    headers: {
-      Authorization: "Basic " + base64encodedData,
-      "Content-type": "application/json",
-    },
-  }).then((res) => res.json());
-};
-
-const getRafal = () => {
-  return fetch(getLink("3D62e7e241da8620d533920cf7"), {
-    headers: {
-      Authorization: "Basic " + base64encodedData,
-      "Content-type": "application/json",
-    },
-  }).then((res) => res.json());
-};
-
-const getSlawek = () => {
-  return fetch(getLink("3D629f4c9c6a7b750068a1f46d"), {
-    headers: {
-      Authorization: "Basic " + base64encodedData,
-      "Content-type": "application/json",
-    },
-  }).then((res) => res.json());
-};
-
-const getAda = () => {
-  return fetch(getLink("3D63624d8ac97f5473af71e469"), {
-    headers: {
-      Authorization: "Basic " + base64encodedData,
-      "Content-type": "application/json",
-    },
-  }).then((res) => res.json());
-};
-
-const getAdrian = () => {
-  return fetch(getLink("3D63ff558b81de11a1adf9a29c"), {
-    headers: {
-      Authorization: "Basic " + base64encodedData,
-      "Content-type": "application/json",
-    },
-  }).then((res) => res.json());
-};
-
 export async function getServerSideProps() {
-  return Promise.all([
-    getProject(),
-    getAda(),
-    getSlawek(),
-    getRafal(),
-    getMichal(),
-    getMarek(),
-    getSzymon(),
-    getMichalM(),
-    getLukasz(),
-    getChris(),
-    getAdrian(),
-  ]).then(
-    ([
-      data,
-      ada,
-      slawek,
-      rafal,
-      michal,
-      marek,
-      szymon,
-      michalm,
-      lukasz,
-      chris,
-      adrian,
-    ]) => {
+  return Promise.all([getProject(), ...getUserPromises()]).then(
+    ([data, ...users]) => {
       return {
         props: {
           project: data,
-          users: {
-            ada,
-            slawek,
-            rafal,
-            michal,
-            marek,
-            szymon,
-            michalm,
-            lukasz,
-            chris,
-            adrian,
-          },
+          users: reduceByIndexOrder(JIRA_USERS, users),
         },
       };
     }

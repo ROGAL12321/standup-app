@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import { SECONDS, STATUS_NAME_ORDER } from "@/constants";
+
 import styles from "../styles/Person.module.css";
 
-const seconds = 60;
+type PersonProps = {
+  data: USER;
+  onClick: () => void;
+};
 
-const statusNamesOrder = ["To do", "In Review", "In Progress"];
-
-export default function Person({ data, onClick }: any) {
-  const [counter, setCounter] = useState(seconds);
+export default function Person({ data, onClick }: PersonProps) {
+  const [counter, setCounter] = useState(SECONDS);
 
   useEffect(() => {
     const interval: any = setInterval(() => {
@@ -18,20 +21,21 @@ export default function Person({ data, onClick }: any) {
   }, []);
 
   useEffect(() => {
-    setCounter(seconds);
+    setCounter(SECONDS);
   }, [data?.issues[0]?.fields?.assignee?.displayName]);
 
   const readyIssues = data.issues
     .filter((issue: any) => {
       const isDone =
         issue.fields.status.name === "Won't Fix" ||
-        issue.fields.status.name === "Done";
+        issue.fields.status.name === "Done" ||
+        issue.fields.status.name === "BACKLOG";
 
       return !isDone;
     })
     .sort((prev: any, next: any) => {
-      return statusNamesOrder.indexOf(prev.fields.status.name) >
-        statusNamesOrder.indexOf(next.fields.status.name)
+      return STATUS_NAME_ORDER.indexOf(prev.fields.status.name) >
+        STATUS_NAME_ORDER.indexOf(next.fields.status.name)
         ? -1
         : 1;
     });
@@ -67,9 +71,7 @@ export default function Person({ data, onClick }: any) {
       )}
 
       <button style={{ fontSize: "90px" }} onClick={onClick}>
-        {counter < 0
-          ? `${Math.abs(counter)} push-ups after stand-up!`
-          : "Next!"}
+        Next!
       </button>
     </div>
   );
