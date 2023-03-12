@@ -17,6 +17,7 @@ const names = [
   "michalm",
   "lukasz",
   "chris",
+  "adrian",
 ].sort(() => Math.random() - 0.5);
 
 export default function Home({ project, users }: any) {
@@ -180,6 +181,15 @@ const getAda = () => {
   }).then((res) => res.json());
 };
 
+const getAdrian = () => {
+  return fetch(getLink("3D63ff558b81de11a1adf9a29c"), {
+    headers: {
+      Authorization: "Basic " + base64encodedData,
+      "Content-type": "application/json",
+    },
+  }).then((res) => res.json());
+};
+
 export async function getServerSideProps() {
   return Promise.all([
     getProject(),
@@ -192,6 +202,7 @@ export async function getServerSideProps() {
     getMichalM(),
     getLukasz(),
     getChris(),
+    getAdrian(),
   ]).then(
     ([
       data,
@@ -204,6 +215,7 @@ export async function getServerSideProps() {
       michalm,
       lukasz,
       chris,
+      adrian,
     ]) => {
       return {
         props: {
@@ -218,6 +230,7 @@ export async function getServerSideProps() {
             michalm,
             lukasz,
             chris,
+            adrian,
           },
         },
       };
