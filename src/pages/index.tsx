@@ -8,13 +8,36 @@ import Person from "@/components/person";
 import { getProject, getUserPromises } from "@/services/jira";
 import { reduceByIndexOrder } from "@/helpers";
 import { JIRA_USERS, NAMES } from "@/constants";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 let counter = 0;
 
 export default function Home({ project, users }: any) {
+  const {data: session, status} = useSession();
   const [currentUser, setCurrentUser] = useState(NAMES[0]);
   const [end, setEnd] = useState(false);
   const [start, setStart] = useState(false);
+
+  if (status === 'loading') {
+    return (
+      <>
+        Loading...
+      </>
+    )
+  }
+
+  if (!session) {
+    return (
+      <>
+        <div className={styles.container}>
+          <h1>Standup App</h1>
+          <button onClick={() => signIn()}>Sign in</button>
+        </div>
+      </>
+    )
+  }
 
   const handleClick = () => {
     counter++;
@@ -35,6 +58,7 @@ export default function Home({ project, users }: any) {
           src="https://media.tenor.com/NNp_ehNBMEoAAAAM/excited-so.gif"
         ></img>
         <button onClick={() => setStart(true)}>Start</button>
+        <button onClick={() => signOut()}>Sign out</button>
       </div>
     );
   }
@@ -74,11 +98,14 @@ export default function Home({ project, users }: any) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context: any) {
+  const session = await getServerSession(context.req, context.res, authOptions)
+
   return Promise.all([getProject(), ...getUserPromises()]).then(
     ([data, ...users]) => {
       return {
         props: {
+          username: session?.user?.name || null,
           project: data,
           users: reduceByIndexOrder(JIRA_USERS, users),
         },
