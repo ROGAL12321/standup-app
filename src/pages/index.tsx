@@ -20,7 +20,7 @@ type HomeProps = {
 };
 
 export default function Home({ project, users }: HomeProps) {
-  const [currentUser, setCurrentUser] = useState<keyof JIRA_USERS>(NAMES[0]);
+  const [currentUser, setCurrentUser] = useState<string>(NAMES[0]);
   const [end, setEnd] = useState(false);
   const [start, setStart] = useState(false);
 

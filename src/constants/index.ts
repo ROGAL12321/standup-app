@@ -15,7 +15,7 @@ export const JIRA_USERS = {
 
 export type JIRA_USERS = typeof JIRA_USERS;
 
-export const NAMES: any[] = Object.keys(JIRA_USERS).sort(
+export const NAMES: string[] = Object.keys(JIRA_USERS).sort(
   () => Math.random() - 0.5
 );
 

@@ -14,7 +14,7 @@ export default function Person({ data, onClick }: PersonProps) {
   const [counter, setCounter] = useState(SECONDS);
 
   useEffect(() => {
-    const interval: any = setInterval(() => {
+    const interval = setInterval(() => {
       if (counter > 0) {
         setCounter((counter) => counter - 1);
       }
@@ -27,7 +27,7 @@ export default function Person({ data, onClick }: PersonProps) {
   }, [data?.issues[0]?.fields?.assignee?.displayName]);
 
   const readyIssues = data.issues
-    .filter((issue: any) => {
+    .filter((issue) => {
       const isDone =
         issue.fields.status.name === "Won't Fix" ||
         issue.fields.status.name === "Done" ||
@@ -35,7 +35,7 @@ export default function Person({ data, onClick }: PersonProps) {
 
       return !isDone;
     })
-    .sort((prev: any, next: any) => {
+    .sort((prev, next) => {
       return STATUS_NAME_ORDER.indexOf(prev.fields.status.name) >
         STATUS_NAME_ORDER.indexOf(next.fields.status.name)
         ? -1
@@ -53,7 +53,7 @@ export default function Person({ data, onClick }: PersonProps) {
       {readyIssues.length === 0 ? (
         <p className={styles.issueSummary}>Nothing here. Whats up?</p>
       ) : (
-        readyIssues.map((issue: any, index: number) => {
+        readyIssues.map((issue, index: number) => {
           return (
             <div key={index} className={styles.issue}>
               <p className={styles.issueTitle}>
