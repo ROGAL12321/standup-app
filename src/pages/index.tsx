@@ -9,6 +9,9 @@ import Button from "@/components/button";
 import { getProject, getUserPromises } from "@/services/jira";
 import { reduceByIndexOrder } from "@/helpers";
 import { JIRA_USERS, NAMES } from "@/constants";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 let counter = 0;
 
@@ -20,9 +23,29 @@ type HomeProps = {
 };
 
 export default function Home({ project, users }: HomeProps) {
+  const {data: session, status} = useSession();
   const [currentUser, setCurrentUser] = useState<string>(NAMES[0]);
   const [end, setEnd] = useState(false);
   const [start, setStart] = useState(false);
+
+  if (status === 'loading') {
+    return (
+      <>
+        Loading...
+      </>
+    )
+  }
+
+  if (!session) {
+    return (
+      <>
+        <div className={styles.container}>
+          <h1 className={styles.title}>Standup App</h1>
+          <Button onClick={() => signIn()} centered>Sign in</Button>
+        </div>
+      </>
+    )
+  }
 
   const handleClick = () => {
     counter++;
@@ -46,6 +69,9 @@ export default function Home({ project, users }: HomeProps) {
           ></img>
           <Button onClick={() => setStart(true)} centered>
             Begin Stand Up
+          </Button>
+          <Button onClick={() => signOut()} centered>
+            Sign out
           </Button>
         </div>
       </>
@@ -90,11 +116,14 @@ export default function Home({ project, users }: HomeProps) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context: any) {
+  const session = await getServerSession(context.req, context.res, authOptions)
+
   return Promise.all([getProject(), ...getUserPromises()]).then(
     ([data, ...users]) => {
       return {
         props: {
+          username: session?.user?.name || null,
           project: data,
           users: reduceByIndexOrder(JIRA_USERS, users),
         },
