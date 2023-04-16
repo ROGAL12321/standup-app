@@ -1,0 +1,70 @@
+.nameContainer {
+  display: grid;
+  grid-template-columns: 64px auto 100px;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.nameContainer p {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.nameContainer span {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.nameContainer img {
+  border-radius: 50px;
+  width: 48px;
+  height: 48px;
+}
+
+.issue {
+  font-size: 30px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  margin: 12px 0;
+  padding: 16px 24px;
+}
+
+.issueTitle {
+  font-weight: bold;
+  display: flex;
+  font-size: 24px;
+  align-items: center;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.issueTitle span {
+  font-size: 12px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 6px 10px;
+}
+
+.issueTitle img {
+  display: inline;
+  width: 20px;
+  margin-right: 20px;
+}
+
+.issueSummary {
+  font-size: 16px;
+}
+
+.personContainer {
+  margin-bottom: 80px;
+}
+
+.buttonContainer {
+  position: absolute;
+  right: 48px;
+  bottom: 48px;
+}

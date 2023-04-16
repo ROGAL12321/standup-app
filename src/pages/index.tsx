@@ -4,6 +4,7 @@ import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 
 import Person from "@/components/person";
+import Button from "@/components/button";
 
 import { getProject, getUserPromises } from "@/services/jira";
 import { reduceByIndexOrder } from "@/helpers";
@@ -14,9 +15,16 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 let counter = 0;
 
-export default function Home({ project, users }: any) {
+type HomeProps = {
+  project: Project;
+  users: {
+    [K in keyof JIRA_USERS]: User;
+  };
+};
+
+export default function Home({ project, users }: HomeProps) {
   const {data: session, status} = useSession();
-  const [currentUser, setCurrentUser] = useState(NAMES[0]);
+  const [currentUser, setCurrentUser] = useState<string>(NAMES[0]);
   const [end, setEnd] = useState(false);
   const [start, setStart] = useState(false);
 
@@ -51,27 +59,38 @@ export default function Home({ project, users }: any) {
 
   if (!start) {
     return (
-      <div className={styles.container}>
-        <h1>Are you ready?</h1>
-        <img
-          className={styles.mainPhoto}
-          src="https://media.tenor.com/NNp_ehNBMEoAAAAM/excited-so.gif"
-        ></img>
-        <button onClick={() => setStart(true)}>Start</button>
-        <button onClick={() => signOut()}>Sign out</button>
-      </div>
+      <>
+        <h2 className={styles.projectName}>{project.name}</h2>
+        <div className={styles.container}>
+          <h1 className={styles.title}>Are you ready?</h1>
+          <img
+            className={styles.entryPhoto}
+            src="https://i.gifer.com/origin/0b/0b2157f45bff10c821635c1749ad47d1_w200.gif"
+          ></img>
+          <Button onClick={() => setStart(true)} centered>
+            Begin Stand Up
+          </Button>
+          <Button onClick={() => signOut()} centered>
+            Sign out
+          </Button>
+        </div>
+      </>
     );
   }
 
   if (end) {
     return (
-      <div className={styles.container}>
-        <img
-          className={styles.mainPhoto}
-          src="https://img1.picmix.com/output/pic/normal/5/3/5/6/7416535_1f01a.gif"
-        />
-        <h1>Thank you!</h1>
-      </div>
+      <>
+        <h2 className={styles.projectName}>{project.name}</h2>
+        <div className={styles.container}>
+          <h1 className={styles.title}>Thank you!</h1>
+          <img
+            className={styles.mainPhoto}
+            src="https://img1.picmix.com/output/pic/normal/5/3/5/6/7416535_1f01a.gif"
+          />
+          <p className={styles.note}>You may now close this tab</p>
+        </div>
+      </>
     );
   }
 
@@ -84,14 +103,13 @@ export default function Home({ project, users }: any) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <h2 className={styles.projectName}>{project.name}</h2>
       <main className={styles.container}>
-        <div className={styles.projectContainer}>
-          <img src={project.avatarUrls["48x48"]} />
-          <h2>{project.name}</h2>
-        </div>
-
         <div>
-          <Person data={users[currentUser]} onClick={handleClick} />
+          <Person
+            data={users[currentUser as keyof JIRA_USERS]}
+            onClick={handleClick}
+          />
         </div>
       </main>
     </>

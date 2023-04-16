@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { SECONDS, STATUS_NAME_ORDER } from "@/constants";
 
-import styles from "../styles/Person.module.css";
+import Button from "../button";
+
+import styles from "./person.module.css";
 
 type PersonProps = {
-  data: USER;
+  data: User;
   onClick: () => void;
 };
 
@@ -12,7 +14,7 @@ export default function Person({ data, onClick }: PersonProps) {
   const [counter, setCounter] = useState(SECONDS);
 
   useEffect(() => {
-    const interval: any = setInterval(() => {
+    const interval = setInterval(() => {
       if (counter > 0) {
         setCounter((counter) => counter - 1);
       }
@@ -25,7 +27,7 @@ export default function Person({ data, onClick }: PersonProps) {
   }, [data?.issues[0]?.fields?.assignee?.displayName]);
 
   const readyIssues = data.issues
-    .filter((issue: any) => {
+    .filter((issue) => {
       const isDone =
         issue.fields.status.name === "Won't Fix" ||
         issue.fields.status.name === "Done" ||
@@ -33,7 +35,7 @@ export default function Person({ data, onClick }: PersonProps) {
 
       return !isDone;
     })
-    .sort((prev: any, next: any) => {
+    .sort((prev, next) => {
       return STATUS_NAME_ORDER.indexOf(prev.fields.status.name) >
         STATUS_NAME_ORDER.indexOf(next.fields.status.name)
         ? -1
@@ -41,38 +43,36 @@ export default function Person({ data, onClick }: PersonProps) {
     });
 
   return (
-    <div>
-      <h2>
-        <img
-          className={styles.avatar}
-          src={data.issues[0].fields.assignee.avatarUrls["48x48"]}
-        />{" "}
-        {data.issues[0].fields.assignee.displayName}{" "}
-        <span>{counter} second</span>
-      </h2>
-      <hr></hr>
+    <div className={styles.personContainer}>
+      <div className={styles.nameContainer}>
+        <img src={data.issues[0].fields.assignee.avatarUrls["48x48"]} />
+        <p>{data.issues[0].fields.assignee.displayName}</p>
+        <span>{counter}s</span>
+      </div>
+
       {readyIssues.length === 0 ? (
-        <p>Nothing here. Whats up?</p>
+        <p className={styles.issueSummary}>Nothing here. Whats up?</p>
       ) : (
-        readyIssues.map((issue: any, index: number) => {
+        readyIssues.map((issue, index: number) => {
           return (
             <div key={index} className={styles.issue}>
               <p className={styles.issueTitle}>
                 {" "}
                 <img src={issue.fields.issuetype.iconUrl} alt="Icon" />
                 {issue.key}
+                <span>{issue.fields.status.name}</span>
               </p>
-              <p>
-                {issue.fields.status.name}: {issue.fields.summary}
-              </p>
+              <p className={styles.issueSummary}>{issue.fields.summary}</p>
             </div>
           );
         })
       )}
 
-      <button style={{ fontSize: "90px" }} onClick={onClick}>
-        Next!
-      </button>
+      <div className={styles.buttonContainer}>
+        <Button onClick={onClick} centered>
+          Next Person
+        </Button>
+      </div>
     </div>
   );
 }

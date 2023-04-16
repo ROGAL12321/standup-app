@@ -1,4 +1,18 @@
+:root {
+  --background: #5856d6;
+  --border-color: #5b6367;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-  font-family: "Arial", sans-serif;
-  background: #eee;
+  background: var(--background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
 }

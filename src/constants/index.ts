@@ -12,7 +12,12 @@ export const JIRA_USERS = {
   slawek: "3D629f4c9c6a7b750068a1f46d",
   szymon: "3D633aa362234d44d406d3c27f",
 };
-export const NAMES = Object.keys(JIRA_USERS).sort(() => Math.random() - 0.5);
+
+export type JIRA_USERS = typeof JIRA_USERS;
+
+export const NAMES: string[] = Object.keys(JIRA_USERS).sort(
+  () => Math.random() - 0.5
+);
 
 export const JIRA_PROJECT_ABBREVIATION = "FS";
 export const SECONDS = 60;

@@ -11,11 +11,11 @@ export const get = (link: string) => {
   }).then((res) => res.json());
 };
 
-export const reduceByIndexOrder = <T extends object>(
+export const reduceByIndexOrder = <T extends {}>(
   collection: T,
-  users: USER[]
+  users: User[]
 ): {
-  [key: string]: any;
+  [key: string]: User;
 } => {
   return Object.keys(collection).reduce((acc, current, index) => {
     return {
