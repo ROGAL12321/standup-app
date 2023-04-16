@@ -1,16 +1,32 @@
 .container {
-  max-width: 640px;
+  width: 760px;
+  min-height: 500px;
+  border-radius: 32px;
   margin: 40px auto;
   border: 1px solid #eee;
-  padding: 20px;
+  padding: 48px;
   background: #fff;
   box-shadow: 3px 5px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
 
-.container h1 {
-  font-size: 40px;
+.projectName {
+  font-size: 24px;
   text-align: center;
-  margin: 20px 0;
+  color: #fff;
+}
+
+.title {
+  font-size: 48px;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.note {
+  font-size: 24px;
+  text-align: center;
 }
 
 .projectContainer {
@@ -23,18 +39,14 @@
   border-radius: 50px;
 }
 
-.container img {
-  display: block;
-  margin: 20px auto;
-}
-
-.container button {
-  font-size: 20px;
-  display: block;
-  margin: 20px auto;
-  padding: 8px 12px;
-}
-
 .mainPhoto {
-  width: 400px;
+  width: 300px;
+  margin: 30px auto;
+  display: block;
+}
+
+.entryPhoto {
+  width: 185px;
+  margin: 0 auto 20px;
+  display: block;
 }

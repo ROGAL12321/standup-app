@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { SECONDS, STATUS_NAME_ORDER } from "@/constants";
 
-import styles from "../styles/Person.module.css";
+import Button from "../button";
+
+import styles from "./person.module.css";
 
 type PersonProps = {
-  data: USER;
+  data: User;
   onClick: () => void;
 };
 
@@ -41,18 +43,15 @@ export default function Person({ data, onClick }: PersonProps) {
     });
 
   return (
-    <div>
-      <h2>
-        <img
-          className={styles.avatar}
-          src={data.issues[0].fields.assignee.avatarUrls["48x48"]}
-        />{" "}
-        {data.issues[0].fields.assignee.displayName}{" "}
-        <span>{counter} second</span>
-      </h2>
-      <hr></hr>
+    <div className={styles.personContainer}>
+      <div className={styles.nameContainer}>
+        <img src={data.issues[0].fields.assignee.avatarUrls["48x48"]} />
+        <p>{data.issues[0].fields.assignee.displayName}</p>
+        <span>{counter}s</span>
+      </div>
+
       {readyIssues.length === 0 ? (
-        <p>Nothing here. Whats up?</p>
+        <p className={styles.issueSummary}>Nothing here. Whats up?</p>
       ) : (
         readyIssues.map((issue: any, index: number) => {
           return (
@@ -61,18 +60,19 @@ export default function Person({ data, onClick }: PersonProps) {
                 {" "}
                 <img src={issue.fields.issuetype.iconUrl} alt="Icon" />
                 {issue.key}
+                <span>{issue.fields.status.name}</span>
               </p>
-              <p>
-                {issue.fields.status.name}: {issue.fields.summary}
-              </p>
+              <p className={styles.issueSummary}>{issue.fields.summary}</p>
             </div>
           );
         })
       )}
 
-      <button style={{ fontSize: "90px" }} onClick={onClick}>
-        Next!
-      </button>
+      <div className={styles.buttonContainer}>
+        <Button onClick={onClick} centered>
+          Next Person
+        </Button>
+      </div>
     </div>
   );
 }
