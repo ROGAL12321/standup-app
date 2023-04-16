@@ -24,7 +24,7 @@ export default function Home({ project, users }: HomeProps) {
   const [end, setEnd] = useState(false);
   const [start, setStart] = useState(false);
 
-  const handleClick = () => {
+  const handleNextPerson = () => {
     counter++;
 
     if (counter > NAMES.length - 1) {
@@ -82,7 +82,7 @@ export default function Home({ project, users }: HomeProps) {
         <div>
           <Person
             data={users[currentUser as keyof JIRA_USERS]}
-            onClick={handleClick}
+            handleNextPerson={handleNextPerson}
           />
         </div>
       </main>

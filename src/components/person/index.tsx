@@ -7,10 +7,10 @@ import styles from "./person.module.css";
 
 type PersonProps = {
   data: User;
-  onClick: () => void;
+  handleNextPerson: () => void;
 };
 
-export default function Person({ data, onClick }: PersonProps) {
+export default function Person({ data, handleNextPerson }: PersonProps) {
   const [counter, setCounter] = useState(SECONDS);
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export default function Person({ data, onClick }: PersonProps) {
       )}
 
       <div className={styles.buttonContainer}>
-        <Button onClick={onClick} centered>
+        <Button onClick={handleNextPerson} centered>
           Next Person
         </Button>
       </div>

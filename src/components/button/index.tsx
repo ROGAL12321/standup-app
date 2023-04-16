@@ -1,9 +1,9 @@
 import styles from "./button.module.css";
 
 type ButtonProps = {
-  onClick: () => void;
   children: React.ReactNode;
   centered?: boolean;
+  onClick?: () => void;
 };
 
 export default function Button({ onClick, children, centered }: ButtonProps) {
