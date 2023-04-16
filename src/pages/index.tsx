@@ -40,8 +40,8 @@ export default function Home({ project, users }: HomeProps) {
     return (
       <>
         <div className={styles.container}>
-          <h1>Standup App</h1>
-          <button onClick={() => signIn()}>Sign in</button>
+          <h1 className={styles.title}>Standup App</h1>
+          <Button onClick={() => signIn()} centered>Sign in</Button>
         </div>
       </>
     )
