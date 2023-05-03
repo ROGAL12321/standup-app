@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 
 import styles from "@/styles/Home.module.css";
@@ -6,32 +6,50 @@ import styles from "@/styles/Home.module.css";
 import Person from "@/components/person";
 import Button from "@/components/button";
 
+import { SECONDS } from "@/constants/constants";
 import { getProject, getUserPromises } from "@/services/jira";
-import { reduceByIndexOrder } from "@/helpers";
-import { JIRA_USERS, NAMES } from "@/constants";
+import { reduceByIndexOrder } from "@/helpers/index";
+import { JIRA_USERS, NAMES } from "@/constants/constants";
 
-let counter = 0;
+let peopleCounter = 0;
 
 type HomeProps = {
   project: Project;
-  users: {
-    [K in keyof JIRA_USERS]: User;
-  };
+  users:
+    | {
+        [K in keyof JIRA_USERS]: User;
+      };
 };
 
 export default function Home({ project, users }: HomeProps) {
-  const [currentUser, setCurrentUser] = useState<string>(NAMES[0]);
+  const [currentUser, setCurrentUser] = useState<keyof typeof JIRA_USERS>(
+    NAMES[0]
+  );
+  const [counter, setCounter] = useState(SECONDS);
   const [end, setEnd] = useState(false);
   const [start, setStart] = useState(false);
 
-  const handleNextPerson = () => {
-    counter++;
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (counter > 0) {
+        setCounter((counter) => counter - 1);
+      }
+    }, 1000);
 
-    if (counter > NAMES.length - 1) {
+    return () => {
+      return clearInterval(interval);
+    };
+  }, []);
+
+  const handleNextPerson = () => {
+    peopleCounter++;
+
+    if (peopleCounter > NAMES.length - 1) {
       return setEnd(true);
     }
 
-    setCurrentUser(NAMES[counter]);
+    setCounter(60);
+    setCurrentUser(NAMES[peopleCounter]);
   };
 
   if (!start) {
@@ -80,10 +98,13 @@ export default function Home({ project, users }: HomeProps) {
       <h2 className={styles.projectName}>{project.name}</h2>
       <main className={styles.container}>
         <div>
-          <Person
-            data={users[currentUser as keyof JIRA_USERS]}
-            handleNextPerson={handleNextPerson}
-          />
+          {users[currentUser] && (
+            <Person
+              data={users[currentUser]}
+              handleNextPerson={handleNextPerson}
+              counter={counter}
+            />
+          )}
         </div>
       </main>
     </>
@@ -92,10 +113,10 @@ export default function Home({ project, users }: HomeProps) {
 
 export async function getServerSideProps() {
   return Promise.all([getProject(), ...getUserPromises()]).then(
-    ([data, ...users]) => {
+    ([project, ...users]) => {
       return {
         props: {
-          project: data,
+          project,
           users: reduceByIndexOrder(JIRA_USERS, users),
         },
       };

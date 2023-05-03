@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SECONDS, STATUS_NAME_ORDER } from "@/constants";
+import { STATUS_NAME_ORDER } from "@/constants/constants";
 
 import Button from "../button";
 
@@ -8,24 +8,14 @@ import styles from "./person.module.css";
 type PersonProps = {
   data: User;
   handleNextPerson: () => void;
+  counter: number;
 };
 
-export default function Person({ data, handleNextPerson }: PersonProps) {
-  const [counter, setCounter] = useState(SECONDS);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (counter > 0) {
-        setCounter((counter) => counter - 1);
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    setCounter(SECONDS);
-  }, [data?.issues[0]?.fields?.assignee?.displayName]);
-
+export default function Person({
+  data,
+  handleNextPerson,
+  counter,
+}: PersonProps) {
   const readyIssues = data.issues
     .filter((issue) => {
       const isDone =
@@ -45,8 +35,8 @@ export default function Person({ data, handleNextPerson }: PersonProps) {
   return (
     <div className={styles.personContainer}>
       <div className={styles.nameContainer}>
-        <img src={data.issues[0].fields.assignee.avatarUrls["48x48"]} />
-        <p>{data.issues[0].fields.assignee.displayName}</p>
+        <img src={data.issues[0]?.fields.assignee.avatarUrls["48x48"]} />
+        <h2>{data.issues[0]?.fields.assignee.displayName}</h2>
         <span>{counter}s</span>
       </div>
 

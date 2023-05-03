@@ -29,7 +29,6 @@ type User = {
   maxResults: number;
   startAt: number;
   total: number;
-  issues: Issue[];
 };
 
 type Project = {

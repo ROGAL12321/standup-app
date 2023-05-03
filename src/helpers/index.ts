@@ -14,9 +14,11 @@ export const get = (link: string) => {
 export const reduceByIndexOrder = <T extends {}>(
   collection: T,
   users: User[]
-): {
-  [key: string]: User;
-} => {
+):
+  | {
+      [K in keyof T]: User;
+    } => {
+  //@ts-ignore
   return Object.keys(collection).reduce((acc, current, index) => {
     return {
       ...acc,

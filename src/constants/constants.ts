@@ -15,9 +15,9 @@ export const JIRA_USERS = {
 
 export type JIRA_USERS = typeof JIRA_USERS;
 
-export const NAMES: string[] = Object.keys(JIRA_USERS).sort(
-  () => Math.random() - 0.5
-);
+export const NAMES: Array<keyof typeof JIRA_USERS> = Object.keys(
+  JIRA_USERS
+).sort(() => Math.random() - 0.5) as Array<keyof typeof JIRA_USERS>;
 
 export const JIRA_PROJECT_ABBREVIATION = "FS";
 export const SECONDS = 60;

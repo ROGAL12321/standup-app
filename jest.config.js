@@ -13,6 +13,12 @@ const customJestConfig = {
     // Handle module aliases (this will be automatically configured for you soon)
     "^@/components/(.*)$": "<rootDir>/src/components/$1",
     "^@/pages/(.*)$": "<rootDir>/src/pages/$1",
+    "^@/constants/(.*)$": "<rootDir>/src/constants/$1",
+    "^@/services/(.*)$": "<rootDir>/src/services/$1",
+    "^@/helpers/(.*)$": "<rootDir>/src/helpers/$1",
+  },
+  fakeTimers: {
+    enableGlobally: true,
   },
 };
 
