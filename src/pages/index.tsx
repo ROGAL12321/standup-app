@@ -31,7 +31,7 @@ export default function Home({ project, users }: HomeProps) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (counter > 0) {
+      if (counter > 0 && start) {
         setCounter((counter) => counter - 1);
       }
     }, 1000);
@@ -39,7 +39,7 @@ export default function Home({ project, users }: HomeProps) {
     return () => {
       return clearInterval(interval);
     };
-  }, []);
+  }, [counter, start]);
 
   const handleNextPerson = () => {
     peopleCounter++;
