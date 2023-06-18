@@ -2,7 +2,14 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+```bash
+cp .env.example .env.local
+```
+
+Fill in the file. You can get the required token here:
+https://id.atlassian.com/manage-profile/security/api-tokens
+
+Then, run the development server:
 
 ```bash
 npm run dev

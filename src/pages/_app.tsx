@@ -2,7 +2,7 @@ import type { AppProps } from "next/app";
 import { Inter } from "@next/font/google";
 import "@/styles/globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin-ext"], display: 'swap', weight: ['400', '700'] });
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
