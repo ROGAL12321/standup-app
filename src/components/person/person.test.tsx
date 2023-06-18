@@ -1,5 +1,5 @@
 import Person from "@/components/person";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import {
   statusName,
   mockedUser,
