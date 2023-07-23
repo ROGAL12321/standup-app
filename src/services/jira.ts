@@ -2,7 +2,7 @@ import { get } from "@/helpers/index";
 import { JIRA_USERS, JIRA_PROJECT_ABBREVIATION } from "@/constants/constants";
 
 export const getLink = (jiraId: string) => {
-  return `${process.env.JIRA_URL}/rest/api/2/search?jql=assignee%${jiraId}`;
+  return `${process.env.JIRA_URL}/rest/api/2/search?jql=assignee%20in%20(${jiraId})%20order%20by%20created%20DESC`;
 };
 
 export const getProject = (): Promise<Project> => {
