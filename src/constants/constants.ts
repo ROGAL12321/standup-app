@@ -1,11 +1,9 @@
 export const JIRA_USERS = {
   ada: "63624d8ac97f5473af71e469",
-  adrian: "63ff558b81de11a1adf9a29c",
   chris: "6397943b61aba8a6a32c7cfb",
   damian: "6310a52cea661fd37d4f11cd",
   kellen: "63bf1bf62a526608c55023cf",
   lukasz: "61656c307a6be400716050bd",
-  marek: "633aa00461dbef2805c10e68",
   michal: "62f0ded8ec6b328032f2c3a7",
   michalm: "63b2ef228a07cbd184ab20e0",
   rafal: "62e7e241da8620d533920cf7",
